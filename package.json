@@ -1,0 +1,18 @@
+{
+  "name": "express-load-balancer",
+  "version": "1.0.0",
+  "description": "Aplicação para balancer a carga de requisições da aplicaçãi btm-api",
+  "main": "index.js",
+  "repository": "git@gitlab.com:r.maycon/express-load-balancer.git",
+  "author": "Maycon <mayconrebordao2014@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "private": true,
+  "dependencies": {
+    "express": "^4.16.3",
+    "node-port-check": "^2.0.0",
+    "request": "^2.87.0"
+  }
+}
