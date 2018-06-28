@@ -25,7 +25,8 @@ COPY package.json /usr/src/app/
 # where available (npm@5+)
 # COPY package*.json ./
 COPY . /usr/src/app
-RUN npm ci
+RUN npm i -g yarn
+RUN yarn 
 # If you are building your code for production
 # RUN npm install --only=production
 
