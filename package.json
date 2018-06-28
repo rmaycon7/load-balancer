@@ -7,12 +7,15 @@
   "author": "Maycon <mayconrebordao2014@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon ./index.js",
     "start": "node ./index.js"
   },
   "private": true,
   "dependencies": {
     "express": "^4.16.3",
     "node-port-check": "^2.0.0",
+    "nodemon": "^1.17.5",
+    "normalize-url": "^3.0.1",
     "request": "^2.87.0"
   }
 }

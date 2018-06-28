@@ -1,16 +1,18 @@
 const express = require('express'),
-	request = require('request')
+	request = require('request'),
+	norm = require('normalize-url')
 let cur = 0,
-	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com/'],
+	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com'],
 	sleep = 'https://btm-api.herokuapp.com'
 
 const handler = (req, res) => {
 	try {
 
 		req.pipe(request({
-			url: servers[cur] + req.url
+			url: norm(servers[cur] + req.url)
 		})).pipe(res);
-		console.log(servers[cur])
+		console.log({url: norm(servers[cur] + req.url)})
+		// console.log(servers[cur])
 		cur = (cur + 1) % servers.length;
 	} catch (error) {
 		req.pipe(request({
