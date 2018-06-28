@@ -22,7 +22,6 @@ const handler = (req, res) => {
 };
 let net = require('net');
 
-
 const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
 let {
 	isFreePort
