@@ -11,14 +11,14 @@ const handler = (req, res) => {
 		req.pipe(request({
 			url: norm(servers[cur] + req.url)
 		})).pipe(res);
-		console.log({url: norm(servers[cur] + req.url)})
+		// console.log({url: norm(servers[cur] + req.url)})
 		// console.log(servers[cur])
 		cur = (cur + 1) % servers.length;
 	} catch (error) {
 		req.pipe(request({
 			url: servers[cur] + req.url
 		})).pipe(res);
-		console.log(servers[cur])
+		// console.log(servers[cur])
 		cur = (cur + 1) % servers.length;
 	}
 };
