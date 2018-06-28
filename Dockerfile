@@ -32,7 +32,6 @@ RUN yarn
 
 # Bundle app source
 # COPY . .
-
 EXPOSE 8080
 
 USER mayconrebordao1122@gmail.com

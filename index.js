@@ -81,9 +81,7 @@ nextAvailable(getport(), '0.0.0.0').then((next) => {
 	})
 })
 
-// run()
 
-// g()
 
 
 setInterval(() => {
