@@ -3,7 +3,7 @@ const express = require('express'),
 	norm = require('normalize-url')
 let cur = 0,
 	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com'],
-	sleep = 'https://btm-api.herokuapp.com'
+	sleep = 'https://btm-api0.herokuapp.com'
 
 const handler = (req, res) => {
 	try {
