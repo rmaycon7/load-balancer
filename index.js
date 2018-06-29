@@ -5,8 +5,19 @@ let cur = 0,
 	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com'],
 	sleep = 'https://btm-api0.herokuapp.com'
 
+
+
+// mongodb://<dbuser>:<dbpassword>@ds018708.mlab.com:18708/middleware
+
+
+
+
+let token;
+
 const handler = (req, res) => {
 	try {
+		req.headers['tk'] =  token
+		// console.log(req.headers)
 
 		req.pipe(request({
 			url: norm(servers[cur] + req.url)
@@ -24,7 +35,8 @@ const handler = (req, res) => {
 };
 let net = require('net');
 
-const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
+const server = express().all('*', handler)
+// const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
 let {
 	isFreePort
 } = require('node-port-check');
@@ -72,19 +84,50 @@ const run = async (port = 8080) => {
 		})
 	}
 
-nextAvailable(getport(), '0.0.0.0').then((next) => {
-	// console.log(next)
-	server.listen(next, (error) => {
-		if (!error) {
-			console.log('Server Run in ' + next)
-		} else {
-			// run(port++)
-		}
-	})
+
+
+const mongoose =  require("mongoose")
+
+mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middleware').then(() =>{
+	
+const TkSchema = new mongoose.Schema({
+    tk: {
+        type: String,
+        require: true
+    }
+});
+
+const Tk = mongoose.model("Tk", TkSchema);
+Tk.findOne({_id: '5b35aef9856afb46f98297fa'}, (error, tk) =>{
+		// console.log(tk)
+		token = tk.tk
+		nextAvailable(getport(), '0.0.0.0').then((next) => {
+			// console.log(next)
+			server.listen(next, (error) => {
+				if (!error) {
+					console.log('Server Run in ' + next)
+				} else {
+					// run(port++)
+				}
+			})
+		})
+	
+})
+
 })
 
 
 
+
+
+
+const https =  require('https')
+setInterval(() => {
+	// console.log(servers[0])
+	request(servers[0], (error, response, body) =>{})
+	request(servers[1], (error, response, body) =>{})
+	request(servers[2], (error, response, body) =>{})
+},250000)
 
 setInterval(() => {
 	let tmp = servers.filter(server => {
