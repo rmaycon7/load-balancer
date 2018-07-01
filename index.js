@@ -2,8 +2,10 @@ const express = require('express'),
 	request = require('request'),
 	norm = require('normalize-url')
 let cur = 0,
+	// servers = ['http://localhost:8081','http://localhost:8081','http://localhost:8081']
 	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com'],
 	sleep = 'https://btm-api0.herokuapp.com'
+	// sleep = 'http://localhost:8081'
 
 
 
@@ -35,7 +37,39 @@ const handler = (req, res) => {
 };
 let net = require('net');
 
-const server = express().all('*', handler)
+const server = express()
+server.use(async (req, res, next) =>{
+	console.log({header: req.headers['content-type']})
+	if (req.headers['content-type'] !=='application/json'){
+		res.status(412).send({
+			code: 'CONTENT_TYPE_NOT_SUPPORTED',
+			statusCode: 412,
+			message: "Content-Type não suportado, por favor verifique se o conteúdo da requisição é appicaiton/json (JSON)  e tente novamento.",
+			name: "Formato Inválido."
+		})
+	}
+	else{
+		next()
+	}
+})
+server.use(async (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization "
+    );
+    res.header('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS');
+    res.header("Content-Type", " application/json; charset=utf-8")
+    // res.header('Provided-By', 'btm-api')
+    res.header('X-Powered-By', 'btm-api')
+    console.log(req.headers)
+    if (req.method === "OPTIONS")
+        res.send();
+    else
+        next();
+    // next();
+})
+.all('*', handler)
 // const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
 let {
 	isFreePort
