@@ -48,7 +48,7 @@ server.use(async (req, res, next) => {
     res.header("Content-Type", " application/json; charset=utf-8")
     // res.header('Provided-By', 'btm-api')
     res.header('X-Powered-By', 'btm-api')
-    console.log(req.headers)
+    // console.log(req.headers)
     if (req.method === "OPTIONS")
         res.send();
     else
@@ -56,7 +56,7 @@ server.use(async (req, res, next) => {
     // next();
 })
 server.use(async (req, res, next) =>{
-	console.log({header: req.headers['content-type']})
+	// console.log({header: req.headers['content-type']})
 	if (req.headers['content-type'] !=='application/json'){
 		res.status(412).send({
 			code: 'CONTENT_TYPE_NOT_SUPPORTED',
