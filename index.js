@@ -55,20 +55,20 @@ server.use(async (req, res, next) => {
         next();
     // next();
 })
-server.use(async (req, res, next) =>{
-	// console.log({header: req.headers['content-type']})
-	if (req.headers['content-type'] !=='application/json'){
-		res.status(412).send({
-			code: 'CONTENT_TYPE_NOT_SUPPORTED',
-			statusCode: 412,
-			message: "Content-Type não suportado, por favor verifique se o conteúdo da requisição é appicaiton/json (JSON)  e tente novamento.",
-			name: "Formato Inválido."
-		})
-	}
-	else{
-		next()
-	}
-})
+// server.use(async (req, res, next) =>{
+// 	// console.log({header: req.headers['content-type']})
+// 	if (req.headers['content-type'] !=='application/json'){
+// 		res.status(412).send({
+// 			code: 'CONTENT_TYPE_NOT_SUPPORTED',
+// 			statusCode: 412,
+// 			message: "Content-Type não suportado, por favor verifique se o conteúdo da requisição é appicaiton/json (JSON)  e tente novamento.",
+// 			name: "Formato Inválido."
+// 		})
+// 	}
+// 	else{
+// 		next()
+// 	}
+// })
 .all('*', handler)
 // const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
 let {
