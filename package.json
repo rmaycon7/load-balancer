@@ -7,16 +7,20 @@
   "author": "Maycon <mayconrebordao2014@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ./index.js",
+    "dev": "nodemon ./index.js --dev ",
     "start": "node ./index.js"
   },
   "private": true,
   "dependencies": {
+    "chalk": "^2.4.1",
     "express": "^4.16.3",
     "mongoose": "^5.1.7",
     "node-port-check": "^2.0.0",
     "nodemon": "^1.17.5",
     "normalize-url": "^3.0.1",
     "request": "^2.87.0"
+  },
+  "devDependencies": {
+    "minimist": "^1.2.0"
   }
 }

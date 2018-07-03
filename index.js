@@ -1,11 +1,32 @@
 const express = require('express'),
 	request = require('request'),
 	norm = require('normalize-url')
-let cur = 0,
-	// servers = ['http://localhost:8081','http://localhost:8081','http://localhost:8081']
+let cur = 0
+
+let argv = require('minimist')(process.argv.slice(2));
+// console.dir(argv);
+let dev = argv['dev'] || argv['DEV']
+let servers, sleep, msg
+// console.log({
+// 	argv_dev: argv['dev'],
+// 	argv_DEV: argv['DEV']
+// })
+if (dev === 'local') {
+	// console.log('local')
+	servers = ['http://localhost:8081', 'http://localhost:8081', 'http://localhost:8081'],
+		sleep = 'http://localhost:8081', msg = {
+			head: "Bem vindo ao  Middleware BTM!",
+			body: "Middleware escalonador e balanceador de carga para a API da aplicação.",
+			action: "running  in port "
+		}
+
+} else {
+
 	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com'],
-	sleep = 'https://btm-api0.herokuapp.com'
-	// sleep = 'http://localhost:8081'
+		sleep = 'https://btm-api0.herokuapp.com', msg = {
+			action: "running ...."
+		}
+}
 
 
 
@@ -13,12 +34,11 @@ let cur = 0,
 
 
 
-
 let token;
 
 const handler = (req, res) => {
 	try {
-		req.headers['tk'] =  token
+		req.headers['tk'] = token
 		// console.log(req.headers)
 
 		req.pipe(request({
@@ -39,37 +59,37 @@ let net = require('net');
 
 const server = express()
 server.use(async (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization "
-    );
-    res.header('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS');
-    res.header("Content-Type", " application/json; charset=utf-8")
-    // res.header('Provided-By', 'btm-api')
-    res.header('X-Powered-By', 'btm-api')
-    // console.log(req.headers)
-    if (req.method === "OPTIONS")
-        res.send();
-    else
-        next();
-    // next();
-})
-// server.use(async (req, res, next) =>{
-// 	// console.log({header: req.headers['content-type']})
-// 	if (req.headers['content-type'] !=='application/json'){
-// 		res.status(412).send({
-// 			code: 'CONTENT_TYPE_NOT_SUPPORTED',
-// 			statusCode: 412,
-// 			message: "Content-Type não suportado, por favor verifique se o conteúdo da requisição é appicaiton/json (JSON)  e tente novamento.",
-// 			name: "Formato Inválido."
-// 		})
-// 	}
-// 	else{
-// 		next()
-// 	}
-// })
-.all('*', handler)
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header(
+			"Access-Control-Allow-Headers",
+			"Origin, X-Requested-With, Content-Type, Accept, Authorization "
+		);
+		res.header('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS');
+		res.header("Content-Type", " application/json; charset=utf-8")
+		// res.header('Provided-By', 'btm-api')
+		res.header('X-Powered-By', 'btm-api')
+		// console.log(req.headers)
+		if (req.method === "OPTIONS")
+			res.send();
+		else
+			next();
+		// next();
+	})
+	// server.use(async (req, res, next) =>{
+	// 	// console.log({header: req.headers['content-type']})
+	// 	if (req.headers['content-type'] !=='application/json'){
+	// 		res.status(412).send({
+	// 			code: 'CONTENT_TYPE_NOT_SUPPORTED',
+	// 			statusCode: 412,
+	// 			message: "Content-Type não suportado, por favor verifique se o conteúdo da requisição é appicaiton/json (JSON)  e tente novamento.",
+	// 			name: "Formato Inválido."
+	// 		})
+	// 	}
+	// 	else{
+	// 		next()
+	// 	}
+	// })
+	.all('*', handler)
 // const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
 let {
 	isFreePort
@@ -90,7 +110,9 @@ let {
 // 	}
 
 const getport = (numb = 8080) =>
-	process.env.PORT || numb
+	process.env.PORT || numb,
+	chalk = require('chalk')
+
 
 const run = async (port = 8080) => {
 		try {
@@ -98,6 +120,7 @@ const run = async (port = 8080) => {
 			console.log(numb)
 			server.listen(numb, (error) => {
 				if (!error) {
+
 					console.log('Server Run in ' + getport(port))
 				} else {
 					run(port++)
@@ -120,48 +143,74 @@ const run = async (port = 8080) => {
 
 
 
-const mongoose =  require("mongoose")
+const mongoose = require("mongoose")
 
-mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middleware').then(() =>{
-	
-const TkSchema = new mongoose.Schema({
-    tk: {
-        type: String,
-        require: true
-    }
-});
+mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middleware').then(() => {
 
-const Tk = mongoose.model("Tk", TkSchema);
-Tk.findOne({_id: '5b35aef9856afb46f98297fa'}, (error, tk) =>{
+	const TkSchema = new mongoose.Schema({
+			tk: {
+				type: String,
+				require: true
+			}
+		}),
+		os = require('os')
+
+	const Tk = mongoose.model("Tk", TkSchema);
+	Tk.findOne({
+		_id: '5b35aef9856afb46f98297fa'
+	}, (error, tk) => {
 		// console.log(tk)
 		token = tk.tk
 		nextAvailable(getport(), '0.0.0.0').then((next) => {
 			// console.log(next)
 			server.listen(next, (error) => {
 				if (!error) {
-					console.log('Server Run in ' + next)
+					console.clear()
+
+					let tp = Object.entries(os.networkInterfaces())
+					// console.log(tp[0])
+					// console.log(tp[1])
+					// console.log(tp[2])
+					// console.log(tp.length)
+					let ip
+					tp.map( tmp =>{
+						console.log(tmp)
+					})
+					for (let i =0; i < tp.length; i++) {
+						let aux = tp[i], help = aux[0]
+						ip +=", "+help.address+":"+next
+					}
+					// console.log({ip:ip})
+					if (msg.head) {
+						console.log("\t\t" + chalk.red(msg.head))
+						console.log("\t" + chalk.blue(msg.body))
+
+						console.log("\t" + msg.action + " " + Object.entries(os.networkInterfaces()) + ":" + next)
+					} else {
+						console.log("\t" + msg.action + " " + Object.entries(os.networkInterfaces()) + ":" + next)
+						// console.log("\t" + msg.action)
+					}
+					// console.log('Server Run in ' + next)
 				} else {
+					console.log(error)
 					// run(port++)
 				}
 			})
 		})
-	
-})
+
+	})
 
 })
 
 
 
-
-
-
-const https =  require('https')
+const https = require('https')
 setInterval(() => {
 	// console.log(servers[0])
-	request(servers[0], (error, response, body) =>{})
-	request(servers[1], (error, response, body) =>{})
-	request(servers[2], (error, response, body) =>{})
-},250000)
+	request(servers[0], (error, response, body) => {})
+	request(servers[1], (error, response, body) => {})
+	request(servers[2], (error, response, body) => {})
+}, 250000)
 
 setInterval(() => {
 	let tmp = servers.filter(server => {
