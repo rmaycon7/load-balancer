@@ -10,7 +10,7 @@
     "build": "babel --presets minify index.js --out-dir lib",
     "dev": "nodemon --config nodemon.json  --exec node ./index.js --dev",
     "start-dev": "./node_modules/nodemon/bin/nodemon.js --config nodemon.json --exec node ./index.js --dev local ",
-    "start": "run-s build start-s",
+    "start": "run-s start-s",
     "start-s": "node ./lib/index.js",
     "restart": "touch ./index.js"
   },
