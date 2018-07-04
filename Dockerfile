@@ -28,6 +28,7 @@ COPY . /usr/src/app
 # RUN npm i -g yarn
 RUN npm i -g yarn
 RUN npm i
+RUN npm run build 
 # If you are building your code for production
 # RUN npm install --only=production
 
