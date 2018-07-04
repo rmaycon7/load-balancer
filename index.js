@@ -389,7 +389,7 @@ setInterval(() => {
 				}
 			}, (error, response, body) => {
 				body = JSON.parse(response.body)
-				sleep.stack_id =  body.build_stack.id
+				sleep.stack_id = body.build_stack.id
 				request.patch({
 					url: sleep.heroku,
 					headers: {
@@ -414,8 +414,8 @@ setInterval(() => {
 
 
 	// console.log(servers, sleep)
-	// }, 28800000)
-}, 10000)
+}, 28800000)
+// }, 10000)
 
 let teste = () => {
 	let l = ['a', 'b', 'c'],
