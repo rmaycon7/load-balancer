@@ -29,9 +29,9 @@ COPY . /usr/src/app
 RUN npm i -g yarn
 RUN npm i
 RUN npm run build 
-# RUN chmod 777 /usr/src/app/* -R
 RUN chmod 777 /usr/src/app
-RUN chmod 777 /usr/src/app/lib
+RUN chmod 777 /usr/src/app/*
+# RUN chmod 777 /usr/src/app/lib
 # If you are building your code for production
 # RUN npm install --only=production
 
