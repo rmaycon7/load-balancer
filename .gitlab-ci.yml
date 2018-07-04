@@ -1,5 +1,6 @@
 stages:
   - docker
+  - deploy
 
 docker:
   stage: docker
@@ -26,3 +27,11 @@ docker:
     - docker push "$CI_REGISTRY_IMAGE:latest"
   only:
     - master
+deploy:
+  stage: deploy
+
+  image: ayufan/openshift-cli
+
+  script: 
+    - oc login "$OPENSHIFT_SERVER" --token="$OPENSHIFT_TOKEN" --insecure-skip-tls-verify 
+    - oc import-image express-load-balancer
