@@ -292,6 +292,33 @@ mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middlewa
 		console.log(tk)
 		token = tk.tk
 		nextAvailable(getport(), '0.0.0.0').then((next) => {
+			servers.map(f => {
+				request.get({
+					url: f.heroku,
+					headers: {
+						'Authorization': 'Bearer ' + f.key,
+						'Accept': 'application/vnd.heroku+json; version=3'
+					}
+				}, (error, response, body) => {
+					body = JSON.parse(response.body)
+					f.stack_id = body.build_stack.id
+					request.patch({
+						url: f.heroku,
+						headers: {
+							'Authorization': 'Bearer ' + f.key,
+							'Accept': 'application/vnd.heroku+json; version=3'
+						},
+						form: {
+							build_stack: f.stack_id,
+							maintenance: false,
+							name: f.name
+						}
+					}, (error, response, body) => {
+						body = JSON.parse(response.body)
+						// console.log(body)
+					})
+				})
+			})
 			// console.log(next)
 			server.listen(next, (error) => {
 				if (!error) {
@@ -398,7 +425,7 @@ setInterval(() => {
 					},
 					form: {
 						build_stack: sleep.stack_id,
-						maintenance: true,
+						maintenance: false,
 						name: sleep.name
 					}
 				}, (error, response, body) => {
@@ -415,7 +442,7 @@ setInterval(() => {
 
 	// console.log(servers, sleep)
 }, 28800000)
-// }, 10000)
+// }, 1000)
 
 let teste = () => {
 	let l = ['a', 'b', 'c'],
