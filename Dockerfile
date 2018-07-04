@@ -31,7 +31,8 @@ RUN npm i
 RUN npm run build 
 RUN chmod 777 /usr/src/app
 RUN chmod 777 /usr/src/app/*
-# RUN chmod 777 /usr/src/app/lib
+RUN chmod 777 /usr/src/app/lib -R
+RUN chmod 777 /usr/src/app/lib/* -R
 # If you are building your code for production
 # RUN npm install --only=production
 
