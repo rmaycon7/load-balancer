@@ -7,13 +7,17 @@
   "author": "Maycon <mayconrebordao2014@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon ./index.js --dev ",
-    "start": "node ./index.js"
+    "dev": "nodemon --config nodemon.json  --exec node ./index.js --dev",
+    "start-dev": "./node_modules/nodemon/bin/nodemon.js --config nodemon.json --exec node ./index.js --dev local ",
+    "start": "node ./index.js",
+    "restart": "touch ./index.js"
   },
   "private": true,
   "dependencies": {
     "chalk": "^2.4.1",
+    "chokidar": "^2.0.4",
     "express": "^4.16.3",
+    "gulp-nodemon": "^2.2.1",
     "mongoose": "^5.1.7",
     "node-port-check": "^2.0.0",
     "nodemon": "^1.17.5",

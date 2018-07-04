@@ -13,19 +13,67 @@ let servers, sleep, msg
 // })
 if (dev === 'local') {
 	// console.log('local')
-	servers = ['http://localhost:8081', 'http://localhost:8081', 'http://localhost:8081'],
+	servers = [{
+			url: 'http://localhost:8081',
+			key: ''
+		}, 'http://localhost:8081', 'http://localhost:8081'],
 		sleep = 'http://localhost:8081', msg = {
 			head: "Bem vindo ao  Middleware BTM!",
 			body: "Middleware escalonador e balanceador de carga para a API da aplicação.",
-			action: "running  in port "
+			action: "running  in "
 		}
 
 } else {
-
-	servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com'],
-		sleep = 'https://btm-api0.herokuapp.com', msg = {
-			action: "running ...."
+	if (dev != undefined) {
+		sleep = {
+			key: "2a0a9c98-f4ac-472e-8863-38e0d4aa46cd",
+			maintenance: true,
+			name: "btm-api0",
+			stack_id: "",
+			url: 'https://btm-api0.herokuapp.com',
+			heroku: 'https://api.heroku.com/apps/btm-api0'
+		}, msg = {
+			head: "Bem vindo ao  Middleware BTM!",
+			body: "Middleware escalonador e balanceador de carga para a API da aplicação.",
+			action: "running  in "
 		}
+	} else {
+
+		sleep = {
+			key: "2a0a9c98-f4ac-472e-8863-38e0d4aa46cd",
+			maintenance: true,
+			name: "btm-api0",
+			stack_id: "",
+			url: 'https://btm-api0.herokuapp.com'
+		}, msg = {
+			action: "running in "
+		}
+	}
+
+	servers = [{
+		key: "402c7c2f-1a91-4f0a-ac20-f10a086fca21",
+		maintenance: true,
+		name: "btm-api1",
+		stack_id: "",
+		url: 'https://btm-api1.herokuapp.com',
+		heroku: "https://api.heroku.com/apps/btm-api1"
+	}, {
+		key: "f766902b-2d81-472f-b3f8-d86c59fac52c",
+		maintenance: true,
+		name: "btm-api2",
+		stack_id: "",
+		url: 'https://btm-api2.herokuapp.com',
+		heroku: "https://api.heroku.com/apps/btm-api2"
+	}, {
+		key: "f484ddae-8a44-423b-af45-3f7e4ce1ab9c",
+		maintenance: true,
+		name: "btm-api3",
+		stack_id: "",
+		url: 'https://btm-api3.herokuapp.com',
+		heroku: "https://api.heroku.com/apps/btm-api3"
+	}]
+
+	// servers = ['https://btm-api1.herokuapp.com', 'https://btm-api2.herokuapp.com', 'https://btm-api3.herokuapp.com']
 }
 
 
@@ -37,22 +85,26 @@ if (dev === 'local') {
 let token;
 
 const handler = (req, res) => {
+	// console.log(token)
 	try {
 		req.headers['tk'] = token
 		// console.log(req.headers)
 
 		req.pipe(request({
-			url: norm(servers[cur] + req.url)
+			url: norm(servers[cur].url + req.url)
 		})).pipe(res);
 		// console.log({url: norm(servers[cur] + req.url)})
 		// console.log(servers[cur])
 		cur = (cur + 1) % servers.length;
 	} catch (error) {
-		req.pipe(request({
-			url: servers[cur] + req.url
-		})).pipe(res);
-		// console.log(servers[cur])
-		cur = (cur + 1) % servers.length;
+		setTimeout((req, res) => {
+			handler(req, res)
+		}, 2000)
+		// req.pipe(request({
+		// 	url: servers[cur] + req.url
+		// })).pipe(res);
+		// // console.log(servers[cur])
+		// cur = (cur + 1) % servers.length;
 	}
 };
 let net = require('net');
@@ -112,7 +164,79 @@ let {
 const getport = (numb = 8080) =>
 	process.env.PORT || numb,
 	chalk = require('chalk')
+// 	nodemon = require('nodemon');
 
+// nodemon({
+// 	script: './index.js'
+// }).on('start', function() {
+// 	console.log('nodemon started');
+// }).on('crash', function() {
+// 	console.log('script crashed for some reason');
+// 	nodemon.emit('restart');
+// });
+
+
+
+// const {
+// 	spawn
+// } = require('child_process');
+
+// function spawnNodemon() {
+// 	const cp = spawn('nodemon', ['./index.js', '--watch', './'], {
+// 		// the important part is the 4th option 'ipc'
+// 		// this way `process.send` will be available in the child process (nodemon)
+// 		// so it can communicate back with parent process (through `.on()`, `.send()`)
+// 		// https://nodejs.org/api/child_process.html#child_process_options_stdio
+// 		stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+// 	});
+
+// 	return cp;
+// }
+
+// var appn = spawnNodemon();
+
+// appn.on('message', function(event) {
+// 	// console.log(event)
+// 	if (event.type === 'start') {
+// 		console.log('nodemon started');
+// 	} else if (event.type === 'crash') {
+// 		console.log('script crashed for some reason');
+// 		appn.send('restart');
+// 		appn.send('exit')
+// 	}
+// });
+// appn.on('exit', function () {
+//   console.log('nodemon quit');
+// });
+
+
+
+// var nodemon = require('nodemon');
+
+// nodemon({
+//   script: './index.js',
+//   ext: 'js '
+// });
+
+// nodemon.on('start', function () {
+//   console.log('App has started');
+// }).on('quit', function () {
+//   console.log('App has quit');
+//   process.exit();
+// }).on('restart', function (files) {
+//   console.log('App restarted due to: ', files);
+// });
+
+// force a restart
+// 
+
+
+// var chokidar = require('chokidar');
+
+// // One-liner for current directory, ignores .dotfiles
+// chokidar.watch('.', {ignored: /(^|[\/\\])\../}).on('all', (event, path) => {
+//   console.log(event, path);
+// });
 
 const run = async (port = 8080) => {
 		try {
@@ -120,15 +244,21 @@ const run = async (port = 8080) => {
 			console.log(numb)
 			server.listen(numb, (error) => {
 				if (!error) {
-
+					console.clear()
 					console.log('Server Run in ' + getport(port))
 				} else {
 					run(port++)
 				}
 			})
 			// server.on('error', (error) => {
-			// 	run(port++)
+			// 	// run(port++)
+			// 	console.clear()
+			// 	console.log("erro")
 			// })
+			process.on('uncaughtException', (error) => {
+				console.clear()
+				console.log('eeee')
+			})
 		} catch (error) {
 			// console.clear()
 			console.log(error)
@@ -159,7 +289,7 @@ mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middlewa
 	Tk.findOne({
 		_id: '5b35aef9856afb46f98297fa'
 	}, (error, tk) => {
-		// console.log(tk)
+		console.log(tk)
 		token = tk.tk
 		nextAvailable(getport(), '0.0.0.0').then((next) => {
 			// console.log(next)
@@ -167,27 +297,30 @@ mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middlewa
 				if (!error) {
 					console.clear()
 
-					let tp = Object.entries(os.networkInterfaces())
 					// console.log(tp[0])
 					// console.log(tp[1])
 					// console.log(tp[2])
 					// console.log(tp.length)
-					let ip
-					tp.map( tmp =>{
-						console.log(tmp)
-					})
-					for (let i =0; i < tp.length; i++) {
-						let aux = tp[i], help = aux[0]
-						ip +=", "+help.address+":"+next
+					// tp.map( tmp =>{
+					// 	console.log(tmp[1][0].address)
+					// })
+					let tp = Object.entries(os.networkInterfaces())
+					let ips = ""
+					for (let i = 0; i < tp.length; i++) {
+
+						ips += "http://" + tp[i][1][0].address + ":" + next
+						if (i < tp.length - 1) {
+							ips += ", "
+						}
 					}
-					// console.log({ip:ip})
+					// console.log({ips:ips})
 					if (msg.head) {
 						console.log("\t\t" + chalk.red(msg.head))
 						console.log("\t" + chalk.blue(msg.body))
 
-						console.log("\t" + msg.action + " " + Object.entries(os.networkInterfaces()) + ":" + next)
+						console.log("\t" + msg.action + " " + ips)
 					} else {
-						console.log("\t" + msg.action + " " + Object.entries(os.networkInterfaces()) + ":" + next)
+						console.log("\t" + msg.action + " " + ips)
 						// console.log("\t" + msg.action)
 					}
 					// console.log('Server Run in ' + next)
@@ -207,21 +340,82 @@ mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middlewa
 const https = require('https')
 setInterval(() => {
 	// console.log(servers[0])
-	request(servers[0], (error, response, body) => {})
-	request(servers[1], (error, response, body) => {})
-	request(servers[2], (error, response, body) => {})
+	request(servers[0].url, (error, response, body) => {})
+	request(servers[1].url, (error, response, body) => {})
+	request(servers[2].url, (error, response, body) => {})
 }, 250000)
 
 setInterval(() => {
-	let tmp = servers.filter(server => {
-		return server !== servers[0]
+	// console.log({sleep: sleep})
+	let id, name
+	request.get({
+		url: sleep.heroku,
+		headers: {
+			'Authorization': 'Bearer ' + sleep.key,
+			'Accept': 'application/vnd.heroku+json; version=3'
+		}
+	}, (error, response, body) => {
+		body = JSON.parse(response.body)
+		id = body.build_stack.id,
+			name = body.name,
+			sleep.stack_id = id
+		// console.log(body)
+		request.patch({
+			url: sleep.heroku,
+			headers: {
+				'Authorization': 'Bearer ' + sleep.key,
+				'Accept': 'application/vnd.heroku+json; version=3'
+			},
+			form: {
+				build_stack: id,
+				maintenance: false,
+				name: name
+			}
+		}, (error, response, body) => {
+			body = JSON.parse(response.body)
+
+			let tmp = servers.filter(server => {
+				return server !== servers[0]
+			})
+			tmp.push(sleep)
+			sleep = servers[0]
+			servers = tmp
+
+			request.get({
+				url: sleep.heroku,
+				headers: {
+					'Authorization': 'Bearer ' + sleep.key,
+					'Accept': 'application/vnd.heroku+json; version=3'
+				}
+			}, (error, response, body) => {
+				body = JSON.parse(response.body)
+				sleep.stack_id =  body.build_stack.id
+				request.patch({
+					url: sleep.heroku,
+					headers: {
+						'Authorization': 'Bearer ' + sleep.key,
+						'Accept': 'application/vnd.heroku+json; version=3'
+					},
+					form: {
+						build_stack: sleep.stack_id,
+						maintenance: true,
+						name: sleep.name
+					}
+				}, (error, response, body) => {
+					body = JSON.parse(response.body)
+					// console.log(body)
+				})
+			})
+
+		})
+		// console.log(body)
 	})
-	tmp.push(sleep)
-	sleep = servers[0]
-	servers = tmp
+
+
+
 	// console.log(servers, sleep)
-}, 28800000)
-// } ,2000)
+	// }, 28800000)
+}, 10000)
 
 let teste = () => {
 	let l = ['a', 'b', 'c'],
