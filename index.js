@@ -409,7 +409,9 @@ if (dev === 'local') {
 			maintenance: true,
 			name: "btm-api0",
 			stack_id: "",
-			url: 'https://btm-api0.herokuapp.com'
+			url: 'https://btm-api0.herokuapp.com',
+			heroku: "https://api.heroku.com/apps/btm-api0"
+
 		}, msg = {
 			action: "running in "
 		}
