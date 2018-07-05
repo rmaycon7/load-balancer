@@ -11,11 +11,7 @@ const handler = async (req, res, next) => {
 
 		req.pipe(request({
 			url: norm(servers[cur].url + req.url)
-		})).pipe(res, () => {
-			console.log({
-				res: res
-			})
-		});
+		})).pipe(res);
 		// console.log({
 		// 	url: norm(servers[cur].url + req.url)
 		// })
