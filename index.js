@@ -2,43 +2,37 @@ const express = require('express'),
 	request = require('request'),
 	norm = require('normalize-url')
 let cur = 0
-
-
-
-// mongodb://<dbuser>:<dbpassword>@ds018708.mlab.com:18708/middleware
-
-
-
 let token;
 
-const handler = (req, res) => {
-	// console.log({token: token})
+const handler = async (req, res, next) => {
+	// console.log(token)
 	try {
 		req.headers['tk'] = token
-		// console.log(req.headers)
 
 		req.pipe(request({
 			url: norm(servers[cur].url + req.url)
-		})).pipe(res);
-		console.log({
-			url: norm(servers[cur].url + req.url)
-		})
+		})).pipe(res, () => {
+			console.log({
+				res: res
+			})
+		});
+		// console.log({
+		// 	url: norm(servers[cur].url + req.url)
+		// })
 		// console.log(servers[cur])
 		cur = (cur + 1) % servers.length;
 	} catch (error) {
 		setTimeout((req, res) => {
 			handler(req, res)
 		}, 2000)
-		// req.pipe(request({
-		// 	url: servers[cur] + req.url
-		// })).pipe(res);
-		// // console.log(servers[cur])
-		// cur = (cur + 1) % servers.length;
 	}
 };
 let net = require('net');
 
-const server = express()
+const server = express(),
+	bp = require("body-parser")
+server.disable('x-powered-by')
+// server.use(express.json())
 server.use(async (req, res, next) => {
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header(
@@ -48,7 +42,7 @@ server.use(async (req, res, next) => {
 		res.header('Access-Control-Allow-Methods', 'GET, PATCH, POST, DELETE, OPTIONS');
 		res.header("Content-Type", " application/json; charset=utf-8")
 		// res.header('Provided-By', 'btm-api')
-		res.header('X-Powered-By', 'btm-api')
+		// res.header('X-Powered-By', 'btm-api')
 		// console.log(req.headers)
 		if (req.method === "OPTIONS")
 			res.send();
@@ -70,141 +64,24 @@ server.use(async (req, res, next) => {
 	// 		next()
 	// 	}
 	// })
+	// server.use(bp.json())
 	.all('*', handler)
-// const server = express().get('*', handler).post('*', handler).patch('*', handler).delete('*', handler);
-let {
-	isFreePort
-} = require('node-port-check');
+
 let {
 	nextAvailable
 } = require('node-port-check');
 
 
-// const getport = async (numb = 8080) => {
-// 		if(  await  isFreePort(numb,'0.0.0.0')){
-// 			numb++
-// 			return await getport(numb)
-// 		}
-// 		else{
-// 			return process.env.PORT || numb
-// 		}
-// 	}
-
 const getport = (numb = 8080) =>
 	process.env.PORT || numb,
 	chalk = require('chalk')
-// 	nodemon = require('nodemon');
-
-// nodemon({
-// 	script: './index.js'
-// }).on('start', function() {
-// 	console.log('nodemon started');
-// }).on('crash', function() {
-// 	console.log('script crashed for some reason');
-// 	nodemon.emit('restart');
-// });
 
 
-
-// const {
-// 	spawn
-// } = require('child_process');
-
-// function spawnNodemon() {
-// 	const cp = spawn('nodemon', ['./index.js', '--watch', './'], {
-// 		// the important part is the 4th option 'ipc'
-// 		// this way `process.send` will be available in the child process (nodemon)
-// 		// so it can communicate back with parent process (through `.on()`, `.send()`)
-// 		// https://nodejs.org/api/child_process.html#child_process_options_stdio
-// 		stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
-// 	});
-
-// 	return cp;
-// }
-
-// var appn = spawnNodemon();
-
-// appn.on('message', function(event) {
-// 	// console.log(event)
-// 	if (event.type === 'start') {
-// 		console.log('nodemon started');
-// 	} else if (event.type === 'crash') {
-// 		console.log('script crashed for some reason');
-// 		appn.send('restart');
-// 		appn.send('exit')
-// 	}
-// });
-// appn.on('exit', function () {
-//   console.log('nodemon quit');
-// });
-
-
-
-// var nodemon = require('nodemon');
-
-// nodemon({
-//   script: './index.js',
-//   ext: 'js '
-// });
-
-// nodemon.on('start', function () {
-//   console.log('App has started');
-// }).on('quit', function () {
-//   console.log('App has quit');
-//   process.exit();
-// }).on('restart', function (files) {
-//   console.log('App restarted due to: ', files);
-// });
-
-// force a restart
-// 
-
-
-// var chokidar = require('chokidar');
-
-// // One-liner for current directory, ignores .dotfiles
-// chokidar.watch('.', {ignored: /(^|[\/\\])\../}).on('all', (event, path) => {
-//   console.log(event, path);
-// });
-
-const run = async (port = 8080) => {
-		try {
-			let numb = await getport(port)
-			console.log(numb)
-			server.listen(numb, (error) => {
-				if (!error) {
-					console.clear()
-					console.log('Server Run in ' + getport(port))
-				} else {
-					run(port++)
-				}
-			})
-			// server.on('error', (error) => {
-			// 	// run(port++)
-			// 	console.clear()
-			// 	console.log("erro")
-			// })
-			process.on('uncaughtException', (error) => {
-				console.clear()
-				console.log('eeee')
-			})
-		} catch (error) {
-			// console.clear()
-			console.log(error)
-			// run(port++)
-		}
-	},
-	k = async () => {
-		console.log({
-			get: await getport()
-		})
-	}
 
 let argv = require('minimist')(process.argv.slice(2));
 // console.dir(argv);
 let dev = argv['dev'] || argv['DEV']
 let servers, sleep, msg
-const https = require('https')
 const nuvem = () => {
 	request.get({
 		url: sleep.heroku,
@@ -355,8 +232,8 @@ const local = () => {
 		sleep = servers[0]
 		servers = tmp
 		// console.log(servers, sleep)
-	}, 28800000)
-	// } ,2000)
+		// }, 28800000)
+	}, 200000)
 
 }
 
@@ -459,7 +336,6 @@ const TkSchema = new mongoose.Schema({
 
 const Tk = mongoose.model("Tk", TkSchema);
 
-
 const get_con = () => {
 
 	Tk.findOne({
@@ -533,46 +409,3 @@ if (db !== 'local') {
 		get_con()
 	})
 }
-
-
-
-let teste = () => {
-	let l = ['a', 'b', 'c'],
-		s = 'd'
-
-	let change = () => {
-		let tmp = l.filter(t => {
-			return t !== l[0]
-		})
-		let cont = 0
-
-		tmp.push(s)
-		s = l[0]
-		l = tmp
-		console.log(l, s)
-		cont++
-		if (cont < 10) {
-
-			// setTimeout(change(l,s,cont),1000)
-			setInterval(() => {
-				let tmp = l.filter(t => {
-					return t !== l[0]
-				})
-
-				tmp.push(s)
-				s = l[0]
-				l = tmp
-				console.log(l, s)
-				cont++
-			}, 28800000)
-		} else {
-			return true;
-		}
-
-	}
-	// change(l, s, 0)
-	change()
-
-}
-
-// teste()
