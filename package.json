@@ -9,6 +9,7 @@
   "scripts": {
     "build": "babel --presets minify index.js --out-dir lib",
     "dev": "nodemon --config nodemon.json  --exec node ./index.js --dev",
+    "dev-local": "nodemon --config nodemon.json  --exec node ./index.js --dev local --db local",
     "start-dev": "./node_modules/nodemon/bin/nodemon.js --config nodemon.json --exec node ./index.js --dev local ",
     "start": "node ./lib/index.js",
     "start-s": "node ./lib/index.js",

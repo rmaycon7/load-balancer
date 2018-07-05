@@ -368,17 +368,17 @@ if (dev === 'local') {
 	console.log('local')
 	// process.exit()
 	servers = [{
-			url: 'http://localhost:8081',
+			url: 'http://localhost:8090',
 			key: ''
 		}, {
-			url: 'http://localhost:8081',
+			url: 'http://localhost:8090',
 			key: ''
 		}, {
-			url: 'http://localhost:8081',
+			url: 'http://localhost:8090',
 			key: ''
 		}],
 		sleep = {
-			url: 'http://localhost:8081',
+			url: 'http://localhost:8090',
 			key: ''
 		},
 		msg = {
@@ -446,19 +446,24 @@ if (dev === 'local') {
 
 const mongoose = require("mongoose")
 
-mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middleware').then(() => {
-	mongoose.Promise = global.Promise
-	const TkSchema = new mongoose.Schema({
-			tk: {
-				type: String,
-				require: true
-			}
-		}),
-		os = require('os')
+let tk_id
+// let argv = require('minimist')(process.argv.slice(2));
+// console.dir(argv);
+const TkSchema = new mongoose.Schema({
+		tk: {
+			type: String,
+			require: true
+		}
+	}),
+	os = require('os')
 
-	const Tk = mongoose.model("Tk", TkSchema);
+const Tk = mongoose.model("Tk", TkSchema);
+
+
+const get_con = () => {
+
 	Tk.findOne({
-		_id: '5b35aef9856afb46f98297fa'
+		_id: tk_id
 	}, (error, tk) => {
 		// setTimeout(() => {
 		// 	console.log({
@@ -509,8 +514,25 @@ mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middlewa
 		})
 
 	})
+}
+let db = argv['db'] || argv['DB']
+if (db !== 'local') {
+	console.log("DB Cloud")
+	tk_id = '5b35aef9856afb46f98297fa'
+	mongoose.connect('mongodb://root:mkdirbuild0099@ds018708.mlab.com:18708/middleware').then(() => {
+		mongoose.Promise = global.Promise
+		get_con()
+	})
 
-})
+
+} else {
+	console.log("DB local")
+	tk_id = '5b3d6c80286867475e68f8c2'
+	mongoose.connect('mongodb://localhost/middleware').then(() => {
+		mongoose.Promise = global.Promise
+		get_con()
+	})
+}
 
 
 
