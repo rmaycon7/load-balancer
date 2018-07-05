@@ -21,7 +21,7 @@ const handler = (req, res) => {
 			url: norm(servers[cur].url + req.url)
 		})).pipe(res);
 		console.log({
-			url: norm(servers[cur] + req.url)
+			url: norm(servers[cur].url + req.url)
 		})
 		// console.log(servers[cur])
 		cur = (cur + 1) % servers.length;
