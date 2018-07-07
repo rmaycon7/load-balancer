@@ -133,10 +133,67 @@ const nuvem = () => {
 	})
 	setInterval(() => {
 		// console.log(servers[0])
+
+
+		request.get({
+			url: sleep.heroku,
+			headers: {
+				'Authorization': 'Bearer ' + sleep.key,
+				'Accept': 'application/vnd.heroku+json; version=3'
+			}
+		}, (error, response, body) => {
+			body = JSON.parse(response.body)
+			sleep.stack_id = body.build_stack.id
+			request.patch({
+				url: sleep.heroku,
+				headers: {
+					'Authorization': 'Bearer ' + sleep.key,
+					'Accept': 'application/vnd.heroku+json; version=3'
+				},
+				form: {
+					build_stack: sleep.stack_id,
+					maintenance: true,
+					name: sleep.name
+				}
+			}, (error, response, body) => {
+				body = JSON.parse(response.body)
+				// console.log(body)
+			})
+		})
+		servers.map(f => {
+			request.get({
+				url: f.heroku,
+				headers: {
+					'Authorization': 'Bearer ' + f.key,
+					'Accept': 'application/vnd.heroku+json; version=3'
+				}
+			}, (error, response, body) => {
+				body = JSON.parse(response.body)
+				f.stack_id = body.build_stack.id
+				request.patch({
+					url: f.heroku,
+					headers: {
+						'Authorization': 'Bearer ' + f.key,
+						'Accept': 'application/vnd.heroku+json; version=3'
+					},
+					form: {
+						build_stack: f.stack_id,
+						maintenance: false,
+						name: f.name
+					}
+				}, (error, response, body) => {
+					body = JSON.parse(response.body)
+					// console.log(body)
+				})
+			})
+		})
+
+
+
 		request(servers[0].url, (error, response, body) => {})
 		request(servers[1].url, (error, response, body) => {})
 		request(servers[2].url, (error, response, body) => {})
-	}, 250000)
+	}, 30000)
 
 	setInterval(() => {
 		// console.log({sleep: sleep})
@@ -191,7 +248,7 @@ const nuvem = () => {
 						},
 						form: {
 							build_stack: sleep.stack_id,
-							maintenance: false,
+							maintenance: true,
 							name: sleep.name
 						}
 					}, (error, response, body) => {
