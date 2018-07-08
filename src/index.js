@@ -468,7 +468,7 @@
 
 const express = require('express');
 
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 8080
 
 // Configure & Run the http server
 const app = express();
