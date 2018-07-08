@@ -41,7 +41,7 @@ RUN echo "xs-ozgAmi0yquV95qzlR_1pYe6D_lbeK6USsBgGlHck.yQrOLY_tsex_qfTNsXfWda_txH
 
 # Bundle app source
 # COPY . .
-EXPOSE 8080
+EXPOSE 4000
 
 USER mayconrebordao1122@gmail.com
 
