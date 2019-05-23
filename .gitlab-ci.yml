@@ -29,7 +29,6 @@ docker:
     - master
 deploy:
   stage: deploy
-
   image: ruby:latest
   stage: production
   only:
