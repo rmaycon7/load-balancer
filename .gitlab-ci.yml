@@ -12,9 +12,9 @@ docker:
     - docker:dind
 
   before_script:
+    - sudo systemctl
     - service
     - sudo service
-    - sudo systemctl
     - apt update
     - apt remove -y docker docker-engine docker.io
     - apt install -y docker.io 
