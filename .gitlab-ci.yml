@@ -18,9 +18,9 @@ docker:
     - apt update
     - apt remove -y docker docker-engine docker.io
     - apt install -y systemd docker.io 
-
-    - systemctl enable docker
-    - systemctl start docker
+    - service docker start 
+    # - systemctl enable docker
+    # - systemctl start docker
     # - apt install -y docker-ce curl 
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" 
 
