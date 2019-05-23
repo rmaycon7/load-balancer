@@ -1,6 +1,8 @@
 dependencies:
   babel-cli: 6.26.0
+  babel-helper-evaluate-path: 0.5.0
   babel-preset-minify: 0.4.3
+  body-parser: 1.19.0
   chalk: 2.4.2
   chokidar: 2.1.6
   express: 4.17.0
@@ -367,6 +369,10 @@ packages:
     dev: false
     resolution:
       integrity: sha1-ComvcCwGshcCf6NxkI3UmJ0+Yz8=
+  /babel-helper-evaluate-path/0.5.0:
+    dev: false
+    resolution:
+      integrity: sha512-mUh0UhS607bGh5wUMAQfOpt2JX2ThXMtppHRdRU1kL7ZLRWIXxoV2UIV1r2cAeeNeU1M5SB5/RSUgUxrK8yOkA==
   /babel-helper-flip-expressions/0.4.3:
     dev: false
     resolution:
@@ -4593,7 +4599,9 @@ packages:
       integrity: sha1-a6MY6xaWFyf10oT46gA+jWFU0Mg=
 specifiers:
   babel-cli: ^6.26.0
+  babel-helper-evaluate-path: ^0.5.0
   babel-preset-minify: ^0.4.3
+  body-parser: ^1.19.0
   chalk: ^2.4.1
   chokidar: ^2.0.4
   express: ^4.16.3
