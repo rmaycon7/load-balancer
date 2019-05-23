@@ -30,8 +30,22 @@ docker:
 deploy:
   stage: deploy
 
-  image: ayufan/openshift-cli
+  image: ruby:latest
+  stage: production
+  only:
+    - master
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=rmaycon-load-balancer --api-key=$HEROKU_KEY
+    # HEROKU_PRODUCTION_API_KEY2
+    # - dpl --provider=heroku --app="$app"0 --api-key=$HEROKU_PRODUCTION_API_KEY0
+    # - dpl --provider=heroku --app="$app"1 --api-key=$HEROKU_PRODUCTION_API_KEY1
+    # - dpl --provider=heroku --app="$app"2 --api-key=$HEROKU_PRODUCTION_API_KEY2
+    # - dpl --provider=heroku --app="$app"3 --api-key=$HEROKU_PRODUCTION_API_KEY3
+  
 
-  script: 
-    - oc login "$OPENSHIFT_SERVER" --token="$OPENSHIFT_TOKEN" --insecure-skip-tls-verify 
-    - oc import-image express-load-balancer
+  # image: ayufan/openshift-cli
+
+  # script: 
+  #   - oc login "$OPENSHIFT_SERVER" --token="$OPENSHIFT_TOKEN" --insecure-skip-tls-verify 
+  #   - oc import-image express-load-balancer
