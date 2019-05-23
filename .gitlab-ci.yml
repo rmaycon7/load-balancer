@@ -5,7 +5,7 @@ stages:
 docker:
   stage: docker
 
-  image: docker:latest
+  image: ubuntu:bionic
 
   services:
     - docker:dind
@@ -22,6 +22,7 @@ docker:
   #     - master
 
   script:
+    - apt install -y docker curl  
     # - echo "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     # - docker build --pull -t "$CI_REGISTRY_IMAGE:latest" .
     # - docker push "$CI_REGISTRY_IMAGE:latest"
