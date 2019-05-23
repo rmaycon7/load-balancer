@@ -17,7 +17,7 @@ docker:
     # - sudo service
     - apt update
     - apt remove -y docker docker-engine docker.io
-    - apt install -y systemd docker.io 
+    - apt install -y systemd docker.io curl
     - service docker start 
     # - systemctl enable docker
     # - systemctl start docker
