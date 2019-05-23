@@ -26,6 +26,7 @@ docker:
     # - docker build --pull -t "$CI_REGISTRY_IMAGE:latest" .
     # - docker push "$CI_REGISTRY_IMAGE:latest"
     - docker login --username=_ --password=$HEROKU_AUTH_TOKEN registry.heroku.com 
+    - docker build -t $APP_ID_OR_NAME . 
     - echo $APP_ID_OR_NAME
     - docker tag $APP_ID_OR_NAME registry.heroku.com/$APP_ID_OR_NAME/web 
     - docker push  registry.heroku.com/$APP_ID_OR_NAME/web
