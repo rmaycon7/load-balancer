@@ -26,9 +26,11 @@ COPY package.json /usr/src/app/
 # COPY package*.json ./
 COPY . /usr/src/app
 # RUN npm i -g yarn
-RUN npm i -g yarn
-RUN npm i
-RUN npm run build 
+# RUN npm i -g yarn
+RUN npm i -g pnpm
+run pnpm add --save-prod --force
+# run pnpm add 
+# RUN npm run build 
 # RUN mkdir -p lib/.well-known/acme-challenge
 # RUN echo "xs-ozgAmi0yquV95qzlR_1pYe6D_lbeK6USsBgGlHck.yQrOLY_tsex_qfTNsXfWda_txHKrobzRlF2Bo3ZEpUs" > lib/.well-known/acme-challenge/xs-ozgAmi0yquV95qzlR_1pYe6D_lbeK6USsBgGlHck
 

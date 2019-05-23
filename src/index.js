@@ -4,6 +4,9 @@ const express = require('express'),
 let cur = 0
 let token;
 
+
+
+
 const handler = async (req, res, next) => {
 	// console.log(token)
 	try {
