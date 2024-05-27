@@ -6,6 +6,7 @@ const app = express();
 // Backend servers
 const servers = [
   "https://vendas-interbrasil-api-2.onrender.com/",
+  'https://vendas-interbrasil-api-1.onrender.com/',
   "https://vendas-interbrasil-api.onrender.com/",
 ];
 
